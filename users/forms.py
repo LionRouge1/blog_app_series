@@ -18,8 +18,14 @@ class CustomUserCreationForm(UserCreationForm):
   bio = forms.CharField(
     widget=forms.Textarea(attrs={'placeholder': 'Enter author biography', 'class': 'form-control', 'rows': 5})
   )
-  password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'placeholder': 'Enter Password', 'class': 'form-control'}))
-  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control'}))
+  password1 = forms.CharField(
+    label='Password', 
+    widget=forms.PasswordInput(attrs={'placeholder': 'Enter Password', 'class': 'form-control'})
+  )
+  password2 = forms.CharField(
+    label='Confirm Password', 
+    widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control'})
+  )
 
   class Meta:
     model = CustomUser
