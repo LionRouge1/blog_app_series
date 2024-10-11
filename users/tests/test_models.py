@@ -43,5 +43,6 @@ class UserTest(TestCase):
     self.assertNotEqual(self.saved.password, self.user_test['password'])
 
   def test_creation_superuser(self):
+    """Super user should have the column is_superuser set to True"""
     super_user = User.objects.create_superuser(email='superuser@gmail.com', password='super12345', bio='User admin')
     self.assertTrue(super_user.is_superuser)
