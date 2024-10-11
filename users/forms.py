@@ -9,8 +9,17 @@ class CustomUserCreationForm(UserCreationForm):
   """
   Set the password fields to the default messages
   """
-  password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+  full_name = forms.CharField(
+    widget=forms.TextInput(attrs={'placeholder': 'Enter Full name', 'class': 'form-control'})
+  )
+  email = forms.CharField(
+    widget=forms.TextInput(attrs={'placeholder': 'Enter email', 'class': 'form-control'})
+  )
+  bio = forms.CharField(
+    widget=forms.Textarea(attrs={'placeholder': 'Enter author biography', 'class': 'form-control', 'rows': 5})
+  )
+  password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'placeholder': 'Enter Password', 'class': 'form-control'}))
+  password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control'}))
 
   class Meta:
     model = CustomUser
