@@ -19,13 +19,14 @@ class SignUpPageTests(TestCase):
   def test_signup_correct_data(self):
     """User should be saved when a correct data is provided"""
     response = self.client.post(reverse('users:signup'), data={
-      'name': self.full_name,
+      'full_name': self.full_name,
       'email': self.email,
       'bio': self.bio,
       'password1': self.password,
       'password2': self.password
     })
-
+    
+    self.assertRedirects(response, reverse('home'))
     users = User.objects.all()
     self.assertEqual(users.count(), 1)
     self.assertNotEqual(users[0].password, self.password)
@@ -33,7 +34,7 @@ class SignUpPageTests(TestCase):
   def test_signup_fake_data(self):
     """User shouldn't be save we missing email field"""
     response = self.client.post(reverse('users:signup'), data={
-      'name': self.full_name,
+      'full_name': self.full_name,
       'email': '',
       'bio': self.bio,
       'password1': self.password,
