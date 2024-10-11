@@ -1,5 +1,5 @@
 from django.test import TestCase
-from users.forms import CustomUserCreationForm, LoginForm
+from users.forms import CustomUserCreationForm
 
 class CustomUserCreationFormTest(TestCase):
   def setUp(self):
@@ -10,7 +10,7 @@ class CustomUserCreationFormTest(TestCase):
 
   def test_email_validation(self):
     data = {
-      'full_name': self.name,
+      'full_name': self.full_name,
       'password1': self.password,
       'password2': self.password,
       'email': 'testegmail.com',
@@ -30,11 +30,11 @@ class CustomUserCreationFormTest(TestCase):
     }
     form = CustomUserCreationForm(data)
     self.assertFalse(form.is_valid())
-    self.assertEqual(form.errors['name'], ["Enter a first and last name."])
+    self.assertEqual(form.errors['full_name'], ["Enter a first and last name."])
 
   def test_password_confirmation(self):
     data = {
-      'full_name': self.name,
+      'full_name': self.full_name,
       'password1': self.password,
       'password2': 'newowkdkdkd',
       'email': self.email,
@@ -46,7 +46,7 @@ class CustomUserCreationFormTest(TestCase):
 
   def test_bio_validation(self):
     data = {
-      'full_name': self.name,
+      'full_name': self.full_name,
       'password1': self.password,
       'password2': self.password,
       'email': self.email,
@@ -58,7 +58,7 @@ class CustomUserCreationFormTest(TestCase):
 
   def test_form_validation(self):
     data = {
-      'full_name': self.name,
+      'full_name': self.full_name,
       'password1': self.password,
       'password2': self.password,
       'email': self.email,
