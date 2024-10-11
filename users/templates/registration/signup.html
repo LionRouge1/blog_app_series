@@ -1,81 +1,67 @@
 {% extends 'layout.html' %}
 
-{% block title %} Register Page {% endblock title%}
+{% block page %} Register {% endblock page%}
 {% block content %}
-    <div class="form-content my-3 p-3">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-7">
-                    <div class="card shadow-lg border-0 rounded-lg mt-0 mb-5">
-                        <div class="card-header justify-content-center">
-                            <h3 class="font-weight-light my-4 text-center">Create Account</h3>
-                        </div>
-                        <div class="card-body">
-                            <form method="POST">
-                                {% csrf_token %}
-                                {% if form.errors %}
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <div id="form_errors">
-                                            {% for key, value in form.errors.items %}
-                                                <strong>{{ value }}</strong>
-                                            {% endfor %}
-                                        </div>
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                {% endif %}
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="small mb-1">Full Name</label>
-                                            {{ form.full_name }}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="small mb-1">Email Address</label>
-                                            {{ form.email }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label class="small mb-1">Biography</label>
-                                          {{ form.bio }}
-                                      </div>
-                                  </div>
-                              </div>
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="small mb-1">Password</label>
-                                            {{ form.password1 }}
-                                            {{ form.errors.password }}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-
-                                        <div class="form-group">
-                                            <label class="small mb-1">Confirm Password</label>
-                                            {{ form.password2 }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-4 mb-0">
-                                    <button type="submit" class="col-md-12 btn btn-dark">Sign Up</button><br><br>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="card-footer text-center">
-                            <div class="small">
-                                <a href="#">Have an account? Go to Sign in</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container my-3 p-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-lg border-0 rounded-lg mt-0 mb-5">
+        <div class="card-header">
+          <h3 class="font-weight-light my-4 text-center">Create Account</h3>
         </div>
+        <form method="POST" class="row g-3 card-body">
+          {% csrf_token %}
+          {% if form.errors %}
+            {% for field, message in form.errors.items %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{field}}:</strong> {{message|first}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            {{ form.full_name }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Email Address</label>
+            {{ form.email }}
+          </div>
+          <div class="col-12">
+            <label class="form-label">Biography</label>
+            {{ form.bio }}
+          </div>
+          <div class="form-group col-md-6">
+            <label for="password1">Password</label>
+            <div class="input-group mt-2">
+              {{ form.password1 }}
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <i class="bi bi-eye-slash" id="togglePassword1" style="cursor: pointer;"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="password2">Confirm Password</label>
+            <div class="input-group mt-2">
+              {{ form.password2 }}
+              <div class="input-group-append">
+                <span class="input-group-text">
+                  <i class="bi bi-eye-slash" id="togglePassword2" style="cursor: pointer;"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group mt-4 mb-0">
+              <button type="submit" class="col-md-12 btn bg-secondary bg-gradient text-white">Sign Up</button><br><br>
+          </div>
+        </form>
+        <div class="card-footer text-center">
+          <a href="#" class="small">Have an account? Go to Sign in</a>
+      </div>
+      </div>
     </div>
+  </div>
+</div>
 {% endblock content %}
