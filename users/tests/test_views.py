@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-class SignUpPageTests(TestCase):
+class SignUpTests(TestCase):
   def setUp(self) -> None:
     self.full_name = 'test user'
     self.email = 'testuser@email.com'
