@@ -1,5 +1,7 @@
 from django.test import TestCase
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, LoginForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 class CustomUserCreationFormTest(TestCase):
   def setUp(self):
@@ -71,3 +73,64 @@ class CustomUserCreationFormTest(TestCase):
     }
     form = CustomUserCreationForm(data)
     self.assertTrue(form.is_valid())
+    
+
+class LoginFormTest(TestCase):
+  def setUp(self):
+    self.user = User.objects.create_user(
+      full_name= 'Tester User',
+      email= 'tester@gmail.com',
+      bio= 'new bio for tester',
+      password= 'password12345'
+    )
+    
+  def test_valid_credentials(self):
+    """
+    With valid credentials, the form should be valid
+    """
+    credentials = {
+      'email': 'tester@gmail.com',
+      'password': 'password12345',
+      'remember_me': False
+    }
+    
+    form = LoginForm(data = credentials)
+    self.assertTrue(form.is_valid())
+    
+  def test_wrong_credentials(self):
+    """
+    With wrong credentials, the form should raise Invalid email or password error
+    """
+    credentials = {
+      'email': 'tester@gmail.com',
+      'password': 'wrongpassword',
+      'remember_me': False
+    }
+    form = LoginForm(data = credentials)
+    self.assertIn('Invalid email or password', str(form.errors['__all__']))
+    
+  def test_credentials_with_empty_email(self):
+    """
+    Should raise error when the email field is empty
+    """
+    credentials = {
+      'email': '',
+      'password': 'wrongpassword',
+      'remember_me': False
+    }
+    form = LoginForm(data = credentials)
+    self.assertFalse(form.is_valid())
+    self.assertIn('This field is required', str(form.errors['email']))
+    
+  def test_credentials_with_empty_password(self):
+    """
+    Should raise error when the password field is empty
+    """
+    credentials = {
+      'email': 'tester@gmail.com',
+      'password': '',
+      'remember_me': False
+    }
+    form = LoginForm(data = credentials)
+    self.assertFalse(form.is_valid())
+    self.assertIn('This field is required', str(form.errors['password']))
