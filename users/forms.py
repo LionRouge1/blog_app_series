@@ -1,5 +1,5 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth import get_user_model, authenticate
 from .models import CustomUser
 from django import forms
 User = get_user_model()
@@ -55,3 +55,45 @@ class CustomUserChangeForm(UserChangeForm):
   class Meta:
     model = CustomUser
     fields = ('full_name', 'photo', 'bio',)
+    
+class LoginForm(AuthenticationForm):
+  email = forms.EmailField(
+    required=True,
+    widget=forms.EmailInput(attrs={'placeholder': 'Email','class': 'form-control',})
+  )
+  password = forms.CharField(
+    required=True,
+    widget=forms.PasswordInput(attrs={
+                                'placeholder': 'Password',
+                                'class': 'form-control',
+                                'data-toggle': 'password',
+                                'id': 'password',
+                                'name': 'password',
+                                })
+  )
+  remember_me = forms.BooleanField(required=False)
+  
+  def __init__(self, *args, **kwargs):
+    super(LoginForm, self).__init__(*args, **kwargs)
+        # Remove username field
+    
+    if 'username' in self.fields:
+      del self.fields['username']
+  
+  def clean(self):
+    email = self.cleaned_data.get('email')
+    password = self.cleaned_data.get('password')
+
+    # Authenticate using email and password
+    if email and password:
+      self.user_cache = authenticate(self.request, email=email, password=password)
+      if self.user_cache is None:
+        raise forms.ValidationError("Invalid email or password")
+      else:
+        self.confirm_login_allowed(self.user_cache)
+
+    return self.cleaned_data
+  
+  class Meta:
+    model = User
+    fields = ('email', 'password', 'remember_me')
