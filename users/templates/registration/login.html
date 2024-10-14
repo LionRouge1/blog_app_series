@@ -21,6 +21,7 @@
           {% endfor %}
         {% endif %}
         <form method="POST" class="card-body">
+          {% csrf_token %}
           <div class="mb-3">
             <label for="id_email" class="form-label">Email address</label>
             {{form.email}}
