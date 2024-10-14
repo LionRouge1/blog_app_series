@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block page %}
+  Login
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 rounded-lg mt-3 mb-3">
+        <div class="card-header justify-content-center">
+          <h3 class="font-weight-light my-1 text-center">Sign In</h3>
+        </div>
+        {% if form.errors %}
+          {% for field, message in form.errors.items %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{message|first}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+        <form method="POST" class="card-body">
+          <div class="mb-3">
+            <label for="id_email" class="form-label">Email address</label>
+            {{form.email}}
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            {{form.password}}
+          </div>
+          <div class="mb-3">
+            {{form.remember_me}}
+            <label>Remember me</label>
+          </div>
+          <div class="mb-3">
+            <button name="login" class="col-md-12 btn bg-secondary bg-gradient text-white">Sign in</button>
+          </div>
+        </form>
+        <div class="card-footer text-center">
+          <div class="small">
+            <a href="{% url 'users:signup' %}">Don't have an account yet? Go to signup</a><br>
+            <a href="#"><i>Forgot Password?</i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
