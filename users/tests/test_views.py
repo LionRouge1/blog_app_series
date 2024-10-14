@@ -26,7 +26,7 @@ class SignUpTests(TestCase):
       'password2': self.password
     })
     
-    self.assertRedirects(response, reverse('home'))
+    self.assertRedirects(response, reverse('users:login'))
     users = User.objects.all()
     self.assertEqual(users.count(), 1)
     self.assertNotEqual(users[0].password, self.password)
@@ -63,6 +63,7 @@ class LoginTests(TestCase):
     """Login page render the correct template"""
     response = self.client.get(reverse('users:login'))
     self.assertTemplateUsed(response, template_name='registration/login.html')
+    self.assertContains(response, '<a class="nav-link" href="/users/sign_up/">Sign Up</a>')
 
   def test_login_with_valid_credentials(self):
     """User should be log in when enter valid credentials"""
@@ -76,6 +77,7 @@ class LoginTests(TestCase):
     self.assertEqual(response.status_code, 200)
     self.assertRedirects(response, reverse('home'))
     self.assertTrue(response.context['user'].is_authenticated)
+    self.assertContains(response, '<a href="/users/log_out/" class="nav-link">Log out</a>')
     
   def test_login_with_wrong_credentials(self):
     """Get error message when enter wrong credentials"""
