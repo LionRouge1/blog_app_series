@@ -1,14 +1,24 @@
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
+from django.conf import settings
 from .forms import CustomUserCreationForm, LoginForm
 from django.contrib.auth import get_user_model, views
 User = get_user_model()
 
 class SignUpView(CreateView):
   form_class = CustomUserCreationForm
+  redirect_authenticated_user = True
   model = User
-  success_url = reverse_lazy('home')
+  success_url = reverse_lazy('users:login')
   template_name = 'registration/signup.html'
+  
+  # def dispatch(self, request, *args, **kwargs):
+  #   # Check if user is already authenticated
+  #   if request.user.is_authenticated:
+  #     # Redirect the user to the homepage or any other page if logged in
+  #     return redirect(f'{settings.LOGIN_REDIRECT_URL}')  # Replace 'home' with your desired URL name
+  #   return super().dispatch(request, *args, **kwargs)
   
 class CustomLoginView(views.LoginView):
   form_class = LoginForm
