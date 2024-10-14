@@ -13,12 +13,12 @@ class SignUpView(CreateView):
   success_url = reverse_lazy('users:login')
   template_name = 'registration/signup.html'
   
-  # def dispatch(self, request, *args, **kwargs):
-  #   # Check if user is already authenticated
-  #   if request.user.is_authenticated:
-  #     # Redirect the user to the homepage or any other page if logged in
-  #     return redirect(f'{settings.LOGIN_REDIRECT_URL}')  # Replace 'home' with your desired URL name
-  #   return super().dispatch(request, *args, **kwargs)
+  def dispatch(self, request, *args, **kwargs):
+    # Check if user is already authenticated
+    if request.user.is_authenticated:
+      # Redirect the user to the homepage or any other page if logged in
+      return redirect(f'{settings.LOGIN_REDIRECT_URL}')  # Replace 'home' with your desired URL name
+    return super().dispatch(request, *args, **kwargs)
   
 class CustomLoginView(views.LoginView):
   form_class = LoginForm
