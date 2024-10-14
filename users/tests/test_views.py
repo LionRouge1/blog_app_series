@@ -63,7 +63,7 @@ class LoginTests(TestCase):
     """Login page render the correct template"""
     response = self.client.get(reverse('users:login'))
     self.assertTemplateUsed(response, template_name='registration/login.html')
-    self.assertContains(response, '<a class="nav-link" href="/users/sign_up/">Sign Up</a>')
+    self.assertContains(response, '<a class="btn btn-outline-dark text-white" href="/users/sign_up/">Sign Up</a>')
 
   def test_login_with_valid_credentials(self):
     """User should be log in when enter valid credentials"""
@@ -77,7 +77,7 @@ class LoginTests(TestCase):
     self.assertEqual(response.status_code, 200)
     self.assertRedirects(response, reverse('home'))
     self.assertTrue(response.context['user'].is_authenticated)
-    self.assertContains(response, '<a href="/users/log_out/" class="nav-link">Log out</a>')
+    self.assertContains(response, '<button type="submit" class="btn btn-danger"><i class="bi bi-door-open-fill"></i> Log out</button>')
     
   def test_login_with_wrong_credentials(self):
     """Get error message when enter wrong credentials"""
