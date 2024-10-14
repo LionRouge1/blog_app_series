@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class SignUpTests(TestCase):
-  def setUp(self) -> None:
+  def setUp(self):
     self.full_name = 'test user'
     self.email = 'testuser@email.com'
     self.bio = 'test user bio'
@@ -44,3 +44,48 @@ class SignUpTests(TestCase):
     self.assertEqual(response.status_code, 200)
     users = User.objects.all()
     self.assertEqual(users.count(), 0)
+    
+class LoginTests(TestCase):
+  def setUp(self):
+    User.objects.create_user(
+      full_name= 'Tester User',
+      email= 'tester@gmail.com',
+      bio= 'new bio for tester',
+      password= 'password12345'
+    )
+    
+  def test_login_url(self):
+    """User can navigate to the login page"""
+    response = self.client.get(reverse('users:login'))
+    self.assertEqual(response.status_code, 200)
+  
+  def test_login_template(self):
+    """Login page render the correct template"""
+    response = self.client.get(reverse('users:login'))
+    self.assertTemplateUsed(response, template_name='registration/login.html')
+
+  def test_login_with_valid_credentials(self):
+    """User should be log in when enter valid credentials"""
+    credentials = {
+      'email': 'tester@gmail.com',
+      'password': 'password12345',
+      'remember_me': False
+    }
+    
+    response = self.client.post(reverse('users:login'), credentials, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertRedirects(response, reverse('home'))
+    self.assertTrue(response.context['user'].is_authenticated)
+    
+  def test_login_with_wrong_credentials(self):
+    """Get error message when enter wrong credentials"""
+    credentials = {
+      'email': 'tester@gmail.com',
+      'password': 'wrongpassword',
+      'remember_me': False
+    }
+    
+    response = self.client.post(reverse('users:login'), credentials, follow=True)
+    self.assertEqual(response.status_code, 200)
+    self.assertContains(response, 'Invalid email or password')
+    self.assertFalse(response.context['user'].is_authenticated)
